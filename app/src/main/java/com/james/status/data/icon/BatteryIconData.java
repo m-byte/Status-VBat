@@ -16,10 +16,12 @@ import java.util.List;
 public class BatteryIconData extends IconData {
 
     private BatteryReceiver receiver;
+    private int vprev;
 
     public BatteryIconData(Context context) {
         super(context);
         receiver = new BatteryReceiver(this);
+        vprev = 5000;
     }
 
     @Override
@@ -45,8 +47,10 @@ public class BatteryIconData extends IconData {
 
             int iconLevel = (int) (((float) level / scale) * 6) + 1;
 
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL || vprev < voltage)
                 iconLevel += 7;
+
+            vprev = voltage;
 
             onIconUpdate(iconLevel);
 
