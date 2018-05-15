@@ -37,9 +37,11 @@ public class BatteryIconData extends IconData {
         Intent intent = getContext().registerReceiver(receiver, getIntentFilter());
 
         if (intent != null) {
-            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            int voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 1);
             int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
+            int level = (voltage - 3200) / (42 - 32);
+            level = level < 0 ? 0 : (level > 100 ? 100 : level);
 
             int iconLevel = (int) (((float) level / scale) * 6) + 1;
 
